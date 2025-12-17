@@ -1,43 +1,63 @@
 // lib/prompt-logic.ts
 
-/**
- * Translates a user's feeling and intensity into a specific art style prompt.
- */
 export function generateArtPrompt(feeling: string, intensity: number): string {
   let styleModifiers = "";
   const feelingLower = feeling.toLowerCase();
 
-  // 1. INTENSITY LOGIC
-  // High intensity = Dramatic, Detailed. Low intensity = Soft, Muted.
+  // --- 1. SOMATIC TRANSLATION (The "Alexithymia" Layer) ---
+  // This maps physical sensations to visual art textures
+  // Source: Your Strategy Document (Dictionary of Affect)
+
+  if (feelingLower.includes("spiky") || feelingLower.includes("sharp")) {
+    styleModifiers += " jagged geometry, sharp angular lines, aggression, chaotic composition,";
+  }
+  if (feelingLower.includes("heavy") || feelingLower.includes("crushing")) {
+    styleModifiers += " weighted composition, bottom-heavy, dense texture, claustrophobic, brutalism,";
+  }
+  if (feelingLower.includes("hollow") || feelingLower.includes("empty")) {
+    styleModifiers += " vast negative space, minimalism, echoing void, transparent textures,";
+  }
+  if (feelingLower.includes("burning") || feelingLower.includes("electric")) {
+    styleModifiers += " high contrast neon, vibrating colors, glitch art, distortion, glowing edges,";
+  }
+  if (feelingLower.includes("cloudy") || feelingLower.includes("foggy")) {
+    styleModifiers += " volumetric fog, gaussian blur, soft edges, ethereal, dreamcore,";
+  }
+  if (feelingLower.includes("shattered") || feelingLower.includes("broken")) {
+    styleModifiers += " fractured cubism, fragmented reality, shards of glass, mosaic, destructive,";
+  }
+  if (feelingLower.includes("blooming") || feelingLower.includes("growing")) {
+    styleModifiers += " organic fractals, art nouveau curves, bioluminescence, flowing intricate lines,";
+  }
+
+  // --- 2. INTENSITY LOGIC ---
   if (intensity > 85) {
-    styleModifiers += " hyper-intense, explosive, dramatic lighting, 8k resolution, intricate detail,";
+    styleModifiers += " hyper-intense, dramatic chiaroscuro lighting, 8k resolution, masterpiece,";
   } else if (intensity > 60) {
     styleModifiers += " vivid, highly detailed, sharp focus,";
   } else {
-    styleModifiers += " soft, muted colors, ethereal, dreamlike, diffuse lighting,";
+    styleModifiers += " soft, muted colors, pastel palette, diffuse lighting, low contrast,";
   }
 
-  // 2. EMOTION LOGIC (The "Psychological Mapping")
-  if (feelingLower.includes("anx") || feelingLower.includes("panic") || feelingLower.includes("stress")) {
-    styleModifiers += " abstract expressionism, jackson pollock style, chaotic jagged lines, high contrast, visual noise, glitch art aesthetics";
+  // --- 3. CORE EMOTION MAPPING ---
+  if (feelingLower.includes("anx") || feelingLower.includes("panic")) {
+    styleModifiers += " abstract expressionism, jackson pollock style, visual noise, glitch";
   } 
-  else if (feelingLower.includes("sad") || feelingLower.includes("depress") || feelingLower.includes("lonely")) {
-    styleModifiers += " minimalist, blue period picasso, edward hopper style, vast empty negative space, cold color palette, solitude, melancholic atmosphere";
+  else if (feelingLower.includes("sad") || feelingLower.includes("lonely") || feelingLower.includes("depress")) {
+    styleModifiers += " blue period picasso, edward hopper style, cold color palette, solitude";
   } 
   else if (feelingLower.includes("ang") || feelingLower.includes("rag") || feelingLower.includes("mad")) {
-    styleModifiers += " francis bacon style, distorted forms, crimson and obsidian palette, sharp aggressive brushstrokes, intense turbulence";
+    styleModifiers += " francis bacon style, distorted forms, crimson and obsidian palette";
   } 
-  else if (feelingLower.includes("happy") || feelingLower.includes("joy") || feelingLower.includes("hope")) {
-    styleModifiers += " impressionist, claude monet style, blooming organic shapes, warm golden hour lighting, pastel colors, harmonious composition";
+  else if (feelingLower.includes("joy") || feelingLower.includes("hope")) {
+    styleModifiers += " claude monet style, warm golden hour lighting, harmonious composition";
   } 
-  else if (feelingLower.includes("fear") || feelingLower.includes("scared")) {
-    styleModifiers += " german expressionism, edvard munch style, distorted shadows, dark moody atmosphere, unease, surrealism";
+  else if (feelingLower.includes("fear")) {
+    styleModifiers += " german expressionism, edvard munch style, distorted shadows, dark moody atmosphere";
   }
   else {
-    // Default fallback for unknown emotions
-    styleModifiers += " surrealism, salvador dali style, symbolic, conceptual art, deep meaning, evocative";
+    styleModifiers += " surrealism, salvador dali style, symbolic, conceptual art, evocative";
   }
 
-  // 3. CONSTRUCT FINAL PROMPT
-  return `A conceptual artistic representation of the emotion "${feeling}". Art style: ${styleModifiers}. High quality, masterpiece, trending on artstation.`;
+  return `A conceptual artistic representation of "${feeling}". Art style: ${styleModifiers}. High quality, trending on artstation.`;
 }

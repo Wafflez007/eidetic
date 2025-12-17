@@ -194,24 +194,38 @@ const handleShare = async () => {
             </p>
           </div>
 
-          {/* Input Form */}
+        {/* Input Form */}
           <div className="space-y-8 bg-neutral-900/30 backdrop-blur-sm p-6 rounded-3xl border border-white/5">
             
             {/* 1. Feeling Input */}
             <div className="space-y-3">
               <label className="text-sm font-semibold text-neutral-300 ml-1">YOUR EMOTION</label>
+              
+              {/* SOMATIC CHIPS (NEW FEATURE) */}
+              <div className="flex flex-wrap gap-2 mb-2">
+                {["Heavy", "Spiky", "Hollow", "Burning", "Cloudy", "Shattered", "Blooming", "Racing"].map((word) => (
+                  <button
+                    key={word}
+                    onClick={() => setFeeling(prev => prev ? `${prev}, ${word}` : word)}
+                    className="px-3 py-1 rounded-full bg-neutral-800/50 border border-neutral-700 text-xs text-neutral-400 hover:bg-purple-500/20 hover:border-purple-500 hover:text-purple-200 transition-all"
+                  >
+                    + {word}
+                  </button>
+                ))}
+              </div>
+
               <div className="relative group">
                 <textarea
                   value={feeling}
                   onChange={(e) => setFeeling(e.target.value)}
-                  placeholder="e.g., A bittersweet nostalgia for a summer long gone..."
+                  placeholder="Describe it... or click the words above if you can't find the words."
                   className="w-full bg-neutral-950/50 border border-neutral-800 rounded-2xl p-4 text-lg text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all resize-none h-32 leading-relaxed"
                 />
                 <Wand2 className="absolute bottom-4 right-4 text-neutral-600 group-focus-within:text-purple-500 transition-colors w-5 h-5" />
               </div>
             </div>
 
-            {/* 2. Intensity Slider */}
+            {/* 2. Intensity Slider (Keep existing code) */}
             <div className="space-y-4">
               <div className="flex justify-between items-center text-sm">
                 <label className="font-semibold text-neutral-300 ml-1">INTENSITY</label>
@@ -227,7 +241,6 @@ const handleShare = async () => {
                   onChange={(e) => setIntensity(Number(e.target.value))}
                   className="w-full h-2 bg-neutral-800 rounded-full appearance-none cursor-pointer accent-purple-500 z-20 relative"
                 />
-                {/* Visual Track Fill */}
                 <div 
                   className="absolute left-0 top-1/2 -translate-y-1/2 h-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 pointer-events-none z-10"
                   style={{ width: `${intensity}%` }}
@@ -239,7 +252,7 @@ const handleShare = async () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons (Keep existing code) */}
             <div className="flex gap-4 pt-2">
               <button 
                 onClick={generateArt}
