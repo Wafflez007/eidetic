@@ -1,58 +1,68 @@
-// app/api/generate/route.ts
 import { NextResponse } from 'next/server';
 import { generateArtPrompt } from '@/lib/prompt-logic';
+
+export const maxDuration = 60; // Bria might take a few seconds
 
 export async function POST(req: Request) {
   try {
     const { feeling, intensity } = await req.json();
 
-    // 1. Logic
+    // 1. Generate the Prompt using your existing logic
     const finalPrompt = generateArtPrompt(feeling, intensity);
 
-    // SECURITY: Only log prompts in dev mode to keep user data private in production logs
     if (process.env.NODE_ENV === 'development') {
-        console.log("Generating with prompt:", finalPrompt);
+      console.log("🎨 Bria Generative Prompt:", finalPrompt);
     }
 
-    // 2. Call Stability AI
+    // 2. Call Bria AI (Text-to-Image)
+    // We use Model 2.3 which is high quality and fast
     const response = await fetch(
-      "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/text-to-image",
+      "https://engine.prod.bria-api.com/v1/text-to-image/base/2.3", 
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${process.env.STABILITY_API_KEY}`,
+          "api_token": process.env.BRIA_API_KEY || "", // Use your Bria Key
         },
         body: JSON.stringify({
-          text_prompts: [{ text: finalPrompt, weight: 1 }],
-          cfg_scale: 7,
-          height: 1024,
-          width: 1024,
-          samples: 1,
-          steps: 30,
+          prompt: finalPrompt,
+          num_results: 1,
+          aspect_ratio: "1:1",
+          sync: true // Important: This keeps the connection open until image is ready
         }),
       }
     );
 
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(JSON.stringify(error));
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Bria API Rejected the request");
     }
 
-    const result = await response.json();
+    const data = await response.json();
     
-    // Safety check for response structure
-    if (!result.artifacts || !result.artifacts[0]) {
-        throw new Error("No image generated");
+    // 3. Extract Image URL
+    // Bria returns: { result: [{ url: "..." }] }
+    const imageUrl = data.result?.[0]?.urls?.[0];
+    
+    if (!imageUrl) {
+      throw new Error("No image URL returned from Bria");
     }
 
-    const imageBase64 = result.artifacts[0].base64;
+    // 4. Convert URL to Base64 (The Bridge)
+    // Your frontend expects a Base64 string to display and upload to Supabase immediately.
+    // We fetch the image from Bria's URL and convert it here on the server.
+    const imageBufferResponse = await fetch(imageUrl);
+    const arrayBuffer = await imageBufferResponse.arrayBuffer();
+    const base64String = Buffer.from(arrayBuffer).toString('base64');
+    const finalImage = `data:image/png;base64,${base64String}`;
 
-    return NextResponse.json({ success: true, image: `data:image/png;base64,${imageBase64}` });
+    return NextResponse.json({ success: true, image: finalImage });
 
-  } catch (error: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-    if (process.env.NODE_ENV === 'development') console.error("Error generating art:", error);
-    return NextResponse.json({ success: false, error: error.message || "Generation Failed" }, { status: 500 });
+  } catch (error: any) {
+    console.error("❌ Bria Generation Error:", error);
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to generate art" },
+      { status: 500 }
+    );
   }
 }
