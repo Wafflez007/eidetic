@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { generateArtPrompt } from '@/lib/prompt-logic';
 
-export const maxDuration = 60; 
+// We don't need maxDuration anymore because this is instant!
 
 export async function POST(req: Request) {
   try {
@@ -12,24 +12,18 @@ export async function POST(req: Request) {
     console.log("🎨 Pollinations Prompt:", finalPrompt);
 
     // 2. Build the Pollinations URL
-    // We add a random seed to ensure every image is unique
-    const seed = Math.floor(Math.random() * 10000);
+    // We add a random seed so the image is consistent (caching works)
+    const seed = Math.floor(Math.random() * 100000);
     const encodedPrompt = encodeURIComponent(finalPrompt);
-    const imageUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${seed}&model=flux`;
+    
+    // We construct the direct URL. 
+    // We use "flux" model which is great for artistic renders.
+    // "nologo=true" removes the Pollinations watermark if possible.
+    const imageUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
 
-    // 3. Fetch the image data directly
-    const response = await fetch(imageUrl);
-
-    if (!response.ok) {
-      throw new Error("Pollinations API failed to return an image");
-    }
-
-    // 4. Convert to Base64
-    const arrayBuffer = await response.arrayBuffer();
-    const base64String = Buffer.from(arrayBuffer).toString('base64');
-    const finalImage = `data:image/jpeg;base64,${base64String}`;
-
-    return NextResponse.json({ success: true, image: finalImage });
+    // 3. Return the URL directly (Instant!)
+    // No fetching, no conversion, no timeouts.
+    return NextResponse.json({ success: true, image: imageUrl });
 
   } catch (error: any) {
     console.error("❌ Generation Error:", error);

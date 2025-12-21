@@ -29,16 +29,16 @@ export default function ControlPanel({
       <div className="space-y-2">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/50 border border-neutral-800 text-xs font-medium text-purple-400 mb-2">
           <Sparkles className="w-3 h-3" />
-          <span>AI Art Generator</span>
+          <span>Alexithymia Art Generator</span>
         </motion.div>
         <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-500">EIDETIC</h1>
-        <p className="text-neutral-400 text-lg max-w-md leading-relaxed">Translate your intangible emotions into tangible visual art.<br />What are you feeling right now?</p>
+        <p className="text-neutral-400 text-lg max-w-md leading-relaxed">Translate your intangible emotions into tangible visual art.<br />Describe the sensations, not the emotion.</p>
       </div>
 
       {/* Controls Container */}
       <div className="space-y-8 bg-neutral-900/30 backdrop-blur-sm p-6 rounded-3xl border border-white/5">
         <div className="space-y-3">
-          <label className="text-sm font-semibold text-neutral-300 ml-1" htmlFor="feelingInput">YOUR EMOTION</label>
+          <label className="text-sm font-semibold text-neutral-300 ml-1" htmlFor="feelingInput">SOMATIC INPUT</label>
           
           {/* Somatic Chips */}
           <div className="flex flex-wrap gap-2 mb-2" role="group" aria-label="Somatic sensation shortcuts">
@@ -59,7 +59,7 @@ export default function ControlPanel({
               id="feelingInput"
               value={feeling}
               onChange={(e) => setFeeling(e.target.value)}
-              placeholder="Describe it... or click the words above."
+              placeholder="Use physical or sensory descriptors (e.g. heavy, sharp, hollow)."
               className="w-full bg-neutral-950/50 border border-neutral-800 rounded-2xl p-4 text-lg text-white placeholder:text-neutral-600 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 transition-all resize-none h-32 leading-relaxed"
             />
             <Wand2 className="absolute bottom-4 right-4 text-neutral-600 group-focus-within:text-purple-500 transition-colors w-5 h-5" />
@@ -69,7 +69,7 @@ export default function ControlPanel({
         {/* Intensity Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center text-sm">
-            <label className="font-semibold text-neutral-300 ml-1" htmlFor="intensitySlider">INTENSITY</label>
+            <label className="font-semibold text-neutral-300 ml-1" htmlFor="intensitySlider">AROUSAL LEVEL</label>
             <span className="text-purple-400 font-mono" aria-hidden="true">{intensity}%</span>
           </div>
           <div className="relative h-6 flex items-center">
@@ -99,7 +99,7 @@ export default function ControlPanel({
             className="flex-1 bg-white text-black font-bold py-4 rounded-xl hover:bg-neutral-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_-5px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.4)] focus:ring-4 focus:ring-purple-500/50 outline-none"
             aria-label="Generate Art"
           >
-            {loading ? <><span className="animate-spin text-xl">✺</span> Dreaming...</> : <><Sparkles className="w-4 h-4" /> Generate Art</>}
+            {loading ? <><span className="animate-spin text-xl">✺</span>Mapping sensation to visual representation…</> : <><Sparkles className="w-4 h-4" />Visualize Internal State</>}
           </button>
           
           {image && (

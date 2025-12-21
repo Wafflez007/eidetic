@@ -9,6 +9,7 @@ import NotificationToast, { NotificationType } from "@/components/NotificationTo
 import DynamicBackground from "@/components/DynamicBackground";
 import ControlPanel from "@/components/ControlPanel";
 import ArtDisplay from "@/components/ArtDisplay";
+import MissionSection from '@/components/MissionSection';
 
 // --- UTILS ---
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -142,13 +143,23 @@ export default function EideticStudio() {
 
     setSaving(true);
     try {
-      const base64Data = image.split(",")[1];
-      const byteCharacters = atob(base64Data);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      // NOTE: Since we are using direct URLs now, we might need to fetch the blob first
+      // if Supabase requires a file upload.
+      // If 'image' is a URL (from Pollinations), we fetch it first.
+      let blob;
+      if (image.startsWith('http')) {
+         const res = await fetch(image);
+         blob = await res.blob();
+      } else {
+         // Fallback for base64
+         const base64Data = image.split(",")[1];
+         const byteCharacters = atob(base64Data);
+         const byteNumbers = new Array(byteCharacters.length);
+         for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+         }
+         blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
       }
-      const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
 
       const cleanFeeling = feeling.replace(/[^a-zA-Z0-9]/g, "-").slice(0, 30);
       const filename = `${Date.now()}-${cleanFeeling}.png`;
@@ -223,7 +234,9 @@ export default function EideticStudio() {
   };
 
   return (
-    <main className="min-h-screen bg-neutral-950 text-white flex items-center justify-center p-4 lg:p-8 relative overflow-hidden">
+    // CHANGED: Added overflow-y-auto so users can scroll to the Mission Section
+    <main className="min-h-screen bg-neutral-950 text-white relative overflow-x-hidden overflow-y-auto">
+      
       {/* Sound Toggle */}
       <div className="absolute top-6 right-6 z-50">
         <button
@@ -240,29 +253,40 @@ export default function EideticStudio() {
         onClose={() => setNotification(null)}
       />
 
-      <DynamicBackground intensity={intensity} />
+      {/* Background (Fixed) */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+          <DynamicBackground intensity={intensity} />
+      </div>
 
-      <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 z-10 items-center">
-        <ControlPanel
-          feeling={feeling}
-          setFeeling={setFeeling}
-          intensity={intensity}
-          setIntensity={setIntensity}
-          loading={loading}
-          image={image}
-          onGenerate={generateArt}
-          onClear={clearCanvas}
-        />
+      <div className="relative z-10 container mx-auto px-4 py-8 flex flex-col items-center">
+        
+        {/* Main App Interface */}
+        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-[85vh]">
+          <ControlPanel
+            feeling={feeling}
+            setFeeling={setFeeling}
+            intensity={intensity}
+            setIntensity={setIntensity}
+            loading={loading}
+            image={image}
+            onGenerate={generateArt}
+            onClear={clearCanvas}
+          />
 
-        <ArtDisplay
-          loading={loading}
-          image={image}
-          insight={insight}
-          saving={saving}
-          saved={saved}
-          onSave={saveToGallery}
-          onShare={handleShare}
-        />
+          <ArtDisplay
+            loading={loading}
+            image={image}
+            insight={insight}
+            saving={saving}
+            saved={saved}
+            onSave={saveToGallery}
+            onShare={handleShare}
+          />
+        </div>
+
+        {/* --- NEW MISSION SECTION --- */}
+        <MissionSection />
+
       </div>
     </main>
   );

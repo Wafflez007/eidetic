@@ -91,7 +91,7 @@ export default function Gallery() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
             <input 
               type="text"
-              placeholder="Search by emotion..."
+              placeholder="Search by descriptor or sensation…"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl bg-neutral-900/80 backdrop-blur-md border border-neutral-800 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-all placeholder:text-neutral-600"
@@ -339,7 +339,7 @@ function EmptyState({ searchTerm }: { searchTerm: string }) {
         </button>
       ) : (
         <Link href="/" className="px-6 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-full transition-all">
-          Create Artwork
+          Externalize a State
         </Link>
       )}
     </div>
