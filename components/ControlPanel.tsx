@@ -27,11 +27,6 @@ export default function ControlPanel({
     <div className="space-y-10">
       {/* Header */}
       <div className="space-y-2">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/50 border border-neutral-800 text-xs font-medium text-purple-400 mb-2">
-          <Sparkles className="w-3 h-3" />
-          <span>Alexithymia Art Generator</span>
-        </motion.div>
-        <h1 className="text-5xl md:text-6xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-500">EIDETIC</h1>
         <p className="text-neutral-400 text-lg max-w-md leading-relaxed">Translate your intangible emotions into tangible visual art.<br />Describe the sensations, not the emotion.</p>
       </div>
 
