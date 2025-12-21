@@ -104,9 +104,9 @@ export default function ArtDisplay({ loading, image, insight, saving, saved, onS
             >
               {saving ? <span className="animate-pulse">Saving...</span> : saved ? <>✓ Saved to Gallery</> : <><Save className="w-4 h-4" />Add to Emotional Record</>}
             </button>
-            <button onClick={onShare} className="px-4 py-3 rounded-full bg-black/60 border border-neutral-700 text-white hover:bg-black/80 hover:border-purple-500/50 transition-all backdrop-blur-md" aria-label="Share artwork">
+            {/* <button onClick={onShare} className="px-4 py-3 rounded-full bg-black/60 border border-neutral-700 text-white hover:bg-black/80 hover:border-purple-500/50 transition-all backdrop-blur-md" aria-label="Share artwork">
               <Share2 className="w-4 h-4" />
-            </button>
+            </button> */}
           </motion.div>
         )}
       </AnimatePresence>
