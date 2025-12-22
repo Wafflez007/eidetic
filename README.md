@@ -150,5 +150,71 @@ Eidetic is designed with safety and humility:
 - The tool encourages reflection, not diagnosis
 
 ---
+🧰 Localhost Setup (Development)
+
+This section explains how to run Eidetic locally for development or evaluation purposes.
+
+✅ Prerequisites
+Node.js Installation
+
+This project requires Node.js and npm.
+If this is your first time setting up a Node.js project, follow the steps below based on your operating system.
+
+🐧 For WSL / Linux Users (Recommended)
+
+Install Node.js using nvm (Node Version Manager):
+
+# Install nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Reload your shell configuration
+source ~/.bashrc
+
+# Install the latest LTS version of Node.js
+nvm install --lts
+
+# Verify installation
+node --version
+npm --version
+
+🪟 For Windows Users
+
+Download and install Node.js (LTS version recommended):
+
+👉 https://nodejs.org/
+
+After installation, verify:
+
+node --version
+npm --version
+
+🍎 For macOS Users
+
+Using Homebrew:
+
+brew install node
+
+
+Or download directly from:
+
+👉 https://nodejs.org/
+
+🚀 Getting Started
+
+First, install project dependencies:
+
+npm install
+
+
+Then, run the development server:
+
+npm run dev
+
+
+Open your browser and navigate to:
+
+👉 http://localhost:3000
+
+You should now see Eidetic running locally.
 
 *Eidetic — Translating the untranslatable*
