@@ -116,6 +116,43 @@ This supports reflective awareness without requiring emotional labeling.
 - **Backend Logic:** Custom affective translation layer
 - **Storage:** Supabase (images + metadata)
 
+## 📁 Project Structure
+
+```
+eidetic/
+├── app/                          # Next.js App Router
+│   ├── api/
+│   │   └── generate/
+│   │       └── route.ts         # Image generation API endpoint
+│   ├── gallery/
+│   │   └── page.tsx             # Gallery view for past visualizations
+│   ├── layout.tsx               # Root layout component
+│   ├── page.tsx                 # Main application page
+│   └── globals.css              # Global styles
+│
+├── components/                   # React components
+│   ├── ArtDisplay.tsx           # Visual output renderer
+│   ├── ControlPanel.tsx         # User input interface
+│   ├── DynamicBackground.tsx    # Animated background
+│   └── NotificationToast.tsx    # User feedback notifications
+│
+├── lib/                          # Core logic & utilities
+│   ├── prompt-logic.ts          # Somatic-to-visual translation layer
+│   └── supabase.ts              # Database client configuration
+│
+├── public/                       # Static assets
+│   └── *.svg                    # Icons and graphics
+│
+└── [config files]               # TypeScript, ESLint, PostCSS, etc.
+```
+
+**Key Files:**
+
+- `lib/prompt-logic.ts` — The affective translation engine (somatic → visual semantics)
+- `app/api/generate/route.ts` — API route handling image generation
+- `components/ControlPanel.tsx` — Input interface for somatic descriptors
+- `components/ArtDisplay.tsx` — Displays generated visualizations
+
 ## 🎯 Why This Matters
 
 Most mental health apps operate in a saturated space of:
